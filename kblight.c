@@ -1,50 +1,69 @@
-
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-//#define PATH "/sys/devices/platform/sony-laptop/kbd_backlight"
-#define PATH "/home/macydnah/aver"
+#define SYSPATH "/sys/devices/platform/sony-laptop/kbd_backlight"
 
-int main()
+int main(int argc, char *argv[])
 {
 
-	/* Declarando variables e
-	*  indicadores de fichero */
-	int state;
+	/* Declarando variables y punteros de fichero. *
+	 * Inicializando variables.		       */
+	int state, automatic=1, on=1, off=1, s=1;
 	FILE *fpr, *fpw;
 
-	//
-	fpr = fopen(PATH, "r");
+	if(argc == 2) {
+	    automatic = strcmp("-auto", argv[1]);
+	    on = strcmp("-on", argv[1]);
+	    off = strcmp("-off", argv[1]);
+	    s = strcmp("-s", argv[1]); }
+	else if(argc > 2) {
+	    printf("Error! too many arguments\n");
+	    exit(1); }
+
+	// Inicializando puntero en modo lectura.
+	fpr = fopen(SYSPATH, "r");
 	if(fpr == NULL) {
 	    printf("Error! opening file\n");
-	    exit(1);
-	}
+	    exit(1); }
 
-
-	//
+	/* Guardando valor de estado en variable state *
+	 * antes de abrir fichero en modo escritura    *
+	 * para que no se sobreescriba.		       */
 	fscanf(fpr, "%d", &state);
 
-	fpw = fopen(PATH, "w");
+	// Inicializando puntero en modo escritura.
+	fpw = fopen(SYSPATH, "w");
 	if(fpw == NULL) {
 	    printf("Error! can't write to file\n");
-	    exit(1);
+	    exit(1); }
+
+	// Los meros meros.
+	if(state == -1) { fprintf(fpw, "%d\n", 0); }
+	if(argc == 1 || automatic == 0) {
+		if(state == 1) {
+		    fprintf(fpw, "%d\n", 0); }
+
+		else if(state == 0 || state == 2) {
+		    fprintf(fpw, "%d\n", 1); }
 	}
-
-	if(state == 0) {
-	    state = 1;
-	    fprintf(fpw, "%d\n", state);
+	else if(on == 0) {
+		if(state == 0 || state == 1) {
+		    fprintf(fpw, "%d\n", 2); }
 	}
-
-	else if(state == 1) {
-	    state = 0;
-	    fprintf(fpw, "%d\n", state);
+	else if(off == 0) {
+		if(state == 1 || state == 2) {
+		    fprintf(fpw, "%d\n", 0); }
 	}
+	else if(s == 0) {
+		if(state == -1) { printf("Actual state is: Invalid State!\n");  }
+		if(state == 0) { printf("Actual state is: off\n");  }
+		if(state == 1) { printf("Actual state is: auto\n"); }
+		if(state == 2) { printf("Actual state is: on\n");   }
+	}
+	else { printf("Error! invalid argument\n"); }
 
-	printf("%d\n", state);
-	//
-	//fscanf(path, "%d", &state);
-
-	//printf("Value of n=%d\n", state);
+	// Cerrando ficheros.
 	fclose(fpr);
 	fclose(fpw);
 
