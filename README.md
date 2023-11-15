@@ -105,7 +105,7 @@ Actual active mode is: auto
 
 It's possible to execute `kblight` at the easiness of pressing a key —much more comfortable than typing commands—.
 
-For this example, it's assumed that you're using `i3-wm` as your window manager, if you're not, please refer to your window manager documentation.
+For this example, it's assumed that you're using `i3-wm` as your window manager, if you're not, please refer to your window manager or desktop environment documentation.
 
 As a prerequisite, configure your system to run `sudo kblight` [without the need to enter sudo password](#run-without-entering-sudo-password).
 
@@ -156,7 +156,7 @@ fi
 #### Run without entering sudo password 
 </summary>
 
-**Disclaimer:** This process can be potentially dangerous **if doing it wrong**, please do your own research before attempt it and remember you're doing this **at your own risk.**
+**Disclaimer:** Be aware that this process can be potentially dangerous **if doing it wrong**. Also remember that if you try this example it's **at your own**, so please do your own research and make sure you understand what you're doing before attempt it.
 
 This is only necessary if you need to execute `kblight` in a way you can't —or don't want to— enter the sudo password at prompt (e.g. if you want to bind `kblight` to a [keyboard shortcut](#turn-on-backlight-with-a-keyboard-shortcut)).
 
